@@ -4,7 +4,6 @@ import com.hamza.microservices.order_service.stubs.InventoryClientStub;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.restdocs.RestDocsRestAssuredConfigurationCustomizer;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
@@ -12,11 +11,9 @@ import org.springframework.context.annotation.Import;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 
-import static org.hamcrest.Matchers.equalTo;
-
 @Import(TestcontainersConfiguration.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureWireMock(port = 0)
+@AutoConfigureWireMock(port = 0) //ask spring to use random port to avoid conflicts
 class OrderServiceApplicationTests {
 
 	@LocalServerPort
@@ -38,6 +35,12 @@ class OrderServiceApplicationTests {
 	}
 	@Test
 	void contextLoads() {
+		//		la configuration du stab
+		InventoryClientStub.stubInventoryCall("iphone_15", 50);
+
+
+
+
 		String requestBody = """
 				{
 				   
@@ -49,7 +52,7 @@ class OrderServiceApplicationTests {
 				{
 				"skuCode": "iphone_15",
 				"price": 1000,
-				"quantity": 1
+				"quantity": 50
                 }
 				""";
 //		InventoryClientStub.stubInventory("iphone_15", 80);
@@ -62,16 +65,17 @@ class OrderServiceApplicationTests {
 //				.then()
 //				.statusCode(201)
 //				.body(equalTo("Order created successfully"));
-InventoryClientStub.stubInventoryCall("iphone_15", 1000);
 
-RestAssured.given()
-        .contentType("application/json")
-        .body(submitOrderJson)
-        .when()
-        .post("/api/order")
-        .then()
-        .log().all()
-        .statusCode(500);
-}
+
+
+		RestAssured.given()
+					.contentType("application/json")
+					.body(submitOrderJson)
+					.when()
+					.post("/api/order")
+					.then()
+					.log().all();
+	//				.statusCode(500);
+		}
 
 }

@@ -14,7 +14,7 @@ public class InventoryClientStub {
         } else {
             stubFor(get(urlEqualTo("/api/inventory?skuCode=" + skuCode + "&quantity=" + quantity))
                     .willReturn(aResponse()
-                            .withStatus(200)
+                            .withStatus(500)
                             .withHeader("Content-Type", "application/json")
                             .withBody("false")));
         }

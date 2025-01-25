@@ -5,7 +5,6 @@ import com.hamza.microservices.order_service.client.InventoryClient;
 import com.hamza.microservices.order_service.dto.OrderRequest;
 import com.hamza.microservices.order_service.model.Order;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
